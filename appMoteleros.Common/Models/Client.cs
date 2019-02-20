@@ -3,24 +3,54 @@
     using Newtonsoft.Json;
     using System;
     using System.ComponentModel.DataAnnotations;
+
     public class Client
     {
         [Key]
-        public int ProductId { get; set; }
-
-        public int CategoryId { get; set; }
+        public int ClientId { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [Display(Name = "Placa")]
+        [StringLength(7)]
+        public string LicensePlate { get; set; }
+
+        [Required]
+        [Display(Name = "Descripción")]
+        [StringLength(60)]
         public string Description { get; set; }
 
-        [DataType(DataType.MultilineText)]
-        public string Remarks { get; set; }
+        [Display(Name = "Propietario")]
+        [StringLength(60)]
+        public string FirstName{ get; set; }
 
-        [Display(Name = "Image")]
+        [Display(Name = "Teléfono")]
+        [StringLength(20)]
+        public string Phone { get; set; }
+
+
+        [DataType(DataType.MultilineText)]
+        public string Notes { get; set; }
+
+        [Display(Name = "Foto")]
         public string ImagePath { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:C0}", ApplyFormatInEditMode = false)]
-        public Decimal Price { get; set; }
+        public string ImageFullPath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.ImagePath))
+                {
+                    return "noproduct";
+                }
+
+                // api en Casa
+                return $"http://192.168.1.36:8075/{this.ImagePath.Substring(1)}";
+            }
+        }
+
+        public override string ToString()
+        {
+            return this.Description;
+        }
     }
 }
